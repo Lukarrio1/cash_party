@@ -5,7 +5,7 @@ namespace App\Http\Controllers\api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Apiusers;
-use App\Http\Resources\PartyResource;
+use App\Http\Resources\json;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
@@ -23,16 +23,16 @@ class LoginController extends Controller
         $randomletter = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, $length);
         $user->apikey = $randomletter;
         $user->save();
-        return  new PartyResource(['status'=>201]);
+        return  new json(['status'=>201]);
     }
 
     public function login(Request $request){
         $user= Apiusers::where('email',$request->email)->first();
         if(!empty($user)){
             if(Hash::check($request->password,$user->password)){
-                return new PartyResource($user);
+                return new json($user);
             }else{
-                return new PartyResource(['status'=>403]);
+                return new json(['status'=>403]);
             }
         }
     }
@@ -40,7 +40,7 @@ class LoginController extends Controller
     public function user($key){
         $user = Apiusers::where('apikey',$key)->first();
         $res = empty($user)?['status'=>403]:$user;
-        return new PartyResource($res);
+        return new json($res);
     }
     
 }
