@@ -32,7 +32,7 @@ class PartyController extends Controller
     {
         $key= Apiusers::where('apikey',$request->key)->first();
         if(empty($key)){
-            return json_encode(['status'=>403]);
+            return json_encode(['status'=>401]);
         }else{
         $party = new party;
         $party->title = $request->title;
@@ -68,7 +68,7 @@ class PartyController extends Controller
     {
         $key= Apiusers::where('apikey',$request->key)->first();
         if(empty($key)){
-            return  new PartyResource(['status'=>403]);
+            return  new PartyResource(['status'=>401]);
         }else{
         $party = party::findOrFail($id);
         $party->title = $request->title;
@@ -90,7 +90,7 @@ class PartyController extends Controller
         $party = party::findOrFail($id);
         $user= Apiusers::find($party->user_id);
         if($party->user_id!=$user->id){
-            return json_encode(['status'=>403]);
+            return json_encode(['status'=>401]);
         }else{
         Storage::delete('public/img/' .$party->img);
         $party->delete();

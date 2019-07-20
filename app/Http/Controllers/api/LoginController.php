@@ -32,14 +32,14 @@ class LoginController extends Controller
             if(Hash::check($request->password,$user->password)){
                 return new json($user);
             }else{
-                return new json(['status'=>403]);
+                return new json(['status'=>401]);
             }
         }
     }
 
     public function user($key){
         $user = Apiusers::where('apikey',$key)->first();
-        $res = empty($user)?['status'=>403]:$user;
+        $res = empty($user)?['status'=>401]:$user;
         return new json($res);
     }
     
