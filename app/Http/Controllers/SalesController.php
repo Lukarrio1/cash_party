@@ -34,6 +34,10 @@ class SalesController extends Controller
        if(empty($user)){
            return new json(['status'=>401]);
        }else{
+        $filenameWithExt = $request->file('img')->getClientOriginalName();
+        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        $extension = $request->file('img')->getClientOriginalExtension();
+        $filenametostore = $filename . '_' . time() . '.' . $extension;
         $notify = new notify;
         $notify->notification="A new ".$request->model."has been added";
         $sale->make = $request->make;
@@ -48,6 +52,8 @@ class SalesController extends Controller
         $sale->location= $request->location;
         $sale->color= $request->color;
         $sale->price=$request->price;
+        $sale->img =$filenametostore;
+        $path = $request->file('img')->storeAs('public/poster', $filenametostore);
         $notify->save();
         $sale->save();
         return new json(['status'=>201]);
@@ -82,6 +88,11 @@ class SalesController extends Controller
        if(empty($user)){
            return new json(['status'=>401]);
        }else{
+        $filenameWithExt = $request->file('img')->getClientOriginalName();
+        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        $extension = $request->file('img')->getClientOriginalExtension();
+        $filenametostore = $filename . '_' . time() . '.' . $extension;
+        $delete=Storage::delete('public/car/' .$sale->img);
         $sale->make = $request->make;
         $sale->year= $request->year;
         $sale->model = $request->model;
@@ -94,6 +105,8 @@ class SalesController extends Controller
         $sale->location= $request->location;
         $sale->color= $request->color;
         $sale->price=$request->price;
+        $sale->img = $filenametostore;
+        $path = $request->file('img')->storeAs('public/car', $filenametostore);
         $sale->save();
         return new json(['status'=>201]);
        }
@@ -113,17 +126,11 @@ class SalesController extends Controller
     }
 
 
-    public function notificatonUpdate(Request $request,$id){
-       $key = $request->key;
-       $user = user::where('apikey',$key)->first();
-       if(empty($user)){
-           return new json(['status'=>401]);
-       }else{ 
+    public function notificatonUpdate($id){
         $notify = notify::find($id);
         $notify->clicked = 0;
         $notify->save();
         return new json(['status'=>200]);
-     }
     }
 
     public function notificatons(){

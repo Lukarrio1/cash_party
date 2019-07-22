@@ -27,6 +27,7 @@ class CreateSalesTable extends Migration
             $table->string('location');
             $table->string('color');
             $table->float('price');
+            $table->string('img');
             $table->timestamps();
         });
     }

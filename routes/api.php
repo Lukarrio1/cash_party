@@ -5,11 +5,11 @@ use Illuminate\Http\Request;
 // Yanik routes
 Route::get('/parties','PartyController@index');
 
+Route::post('/party/{id}','PartyController@update');
+
 Route::get('/party/{id}','PartyController@show');
 
 Route::post('/party','PartyController@store');
-
-Route::put('/party/{id}','PartyController@update');
 
 Route::delete('/party/{id}','PartyController@destroy');
 
@@ -28,10 +28,10 @@ Route::post('/car','SalesController@store');
 
 Route::get('/car/{id}','SalesController@show');
 
-Route::put('/car/{id}','SalesController@update');
+Route::post('/car/{id}','SalesController@update');
 
 Route::delete('/car/{id}','SalesController@destroy');
 
-Route::put('/notification/{id}','SalesController@notificationUpdate');
+Route::get('/notification/{id}','SalesController@notificationUpdate');
 
 Route::get('/notifications','SalesController@notifcations');

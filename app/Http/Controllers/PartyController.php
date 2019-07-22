@@ -34,12 +34,17 @@ class PartyController extends Controller
         if(empty($key)){
             return json_encode(['status'=>401]);
         }else{
+        $filenameWithExt = $request->file('img')->getClientOriginalName();
+        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        $extension = $request->file('img')->getClientOriginalExtension();
+        $filenametostore = $filename . '_' . time() . '.' . $extension;
         $party = new party;
         $party->title = $request->title;
         $party->user_id= $key->id;
         $party->description = $request->description;
         $party->price =$request->price;
-        $party->img =$request->img;
+        $party->img =$filenametostore;
+        $path = $request->file('img')->storeAs('public/poster', $filenametostore);
         $party->save();
          return  new PartyResource(['status'=>201]);
         }
@@ -64,18 +69,26 @@ class PartyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,$id)
     {
         $key= Apiusers::where('apikey',$request->key)->first();
         if(empty($key)){
-            return  new PartyResource(['status'=>401]);
+            return json_encode(['status'=>401]);
         }else{
-        $party = party::findOrFail($id);
+        $filenameWithExt = $request->file('img')->getClientOriginalName();
+        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        $extension = $request->file('img')->getClientOriginalExtension();
+        $filenametostore = $filename . '_' . time() . '.' . $extension;
+        $party = party::find($id);
+        $delete =Storage::delete('public/poster/' .$party->img);
         $party->title = $request->title;
+        $party->user_id= $key->id;
         $party->description = $request->description;
         $party->price =$request->price;
+        $party->img =$filenametostore;
+        $path = $request->file('img')->storeAs('public/poster', $filenametostore);
         $party->save();
-        return  new PartyResource(['status'=>200]);
+         return  new PartyResource(['status'=>201]);
         }
     }
 
@@ -88,14 +101,9 @@ class PartyController extends Controller
     public function destroy($id)
     {
         $party = party::findOrFail($id);
-        $user= Apiusers::find($party->user_id);
-        if($party->user_id!=$user->id){
-            return json_encode(['status'=>401]);
-        }else{
-        Storage::delete('public/img/' .$party->img);
+        $delete=Storage::delete('public/poster/' .$party->img);
         $party->delete();
-        return json_encode(['status'=>200]);
-        }
-        
+        return new PartyResource(['status'=>200]);
+
     }
 }
