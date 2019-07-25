@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Apiusers;
 use App\Http\Resources\json;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\PartyController;
 
 class LoginController extends Controller
 {
@@ -34,6 +35,8 @@ class LoginController extends Controller
             }else{
                 return new json(['status'=>401]);
             }
+        }else{
+            return new PartyController(['status'=>401]);
         }
     }
 

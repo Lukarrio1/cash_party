@@ -79,7 +79,7 @@ class PartyController extends Controller
         $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
         $extension = $request->file('img')->getClientOriginalExtension();
         $filenametostore = $filename . '_' . time() . '.' . $extension;
-        $party = party::find($id);
+        $party = party::findOrFail($id);
         $delete =Storage::delete('public/poster/' .$party->img);
         $party->title = $request->title;
         $party->user_id= $key->id;
