@@ -12,12 +12,12 @@
 */
 
 Route::get('/', function () {
-    $login = "this is the route ";
-    $parties = "this is the route for all parties";
-    $party ="this is the route to show a single party";
-    $store="this is the store route";
+    $login = "http://159.65.220.145/api/login";
+    $parties = "http://159.65.220.145/api/parties";
+    $party ="http://159.65.220.145/api/party/{id}";
+    $store="http://159.65.220.145/api/party";
     $put = "this is the route for the update route.";
-    $delete = "this is the route for the delete";
+    $delete = "http://159.65.220.145/api/party/{id}";
     return view('welcome')
     ->with('login',$login)
     ->with('parties',$parties)

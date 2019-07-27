@@ -81,7 +81,6 @@ class PartyController extends Controller
                 $party->user_id= $key->id;
                 $party->description = $request->description;
                 $party->price =$request->price;
-                $path = $request->file('img')->storeAs('public/poster', $filenametostore);
                 $party->save();
                  return  new PartyResource(['status'=>201]);
             }else{
