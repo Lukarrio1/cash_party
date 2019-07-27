@@ -75,20 +75,32 @@ class PartyController extends Controller
         if(empty($key)){
             return json_encode(['status'=>401]);
         }else{
-        $filenameWithExt = $request->file('img')->getClientOriginalName();
-        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-        $extension = $request->file('img')->getClientOriginalExtension();
-        $filenametostore = $filename . '_' . time() . '.' . $extension;
-        $party = party::findOrFail($id);
-        $delete =Storage::delete('public/poster/' .$party->img);
-        $party->title = $request->title;
-        $party->user_id= $key->id;
-        $party->description = $request->description;
-        $party->price =$request->price;
-        $party->img =$filenametostore;
-        $path = $request->file('img')->storeAs('public/poster', $filenametostore);
-        $party->save();
-         return  new PartyResource(['status'=>201]);
+            if($request->file('img')==null){
+                $party = party::findOrFail($id);
+                $party->title = $request->title;
+                $party->user_id= $key->id;
+                $party->description = $request->description;
+                $party->price =$request->price;
+                $path = $request->file('img')->storeAs('public/poster', $filenametostore);
+                $party->save();
+                 return  new PartyResource(['status'=>201]);
+            }else{
+                $filenameWithExt = $request->file('img')->getClientOriginalName();
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                $extension = $request->file('img')->getClientOriginalExtension();
+                $filenametostore = $filename . '_' . time() . '.' . $extension;
+                $party = party::findOrFail($id);
+                $delete =Storage::delete('public/poster/' .$party->img);
+                $party->title = $request->title;
+                $party->user_id= $key->id;
+                $party->description = $request->description;
+                $party->price =$request->price;
+                $party->img =$filenametostore;
+                $path = $request->file('img')->storeAs('public/poster', $filenametostore);
+                $party->save();
+                 return  new PartyResource(['status'=>201]);
+            }
+      
         }
     }
 
