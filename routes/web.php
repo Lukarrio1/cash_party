@@ -26,3 +26,8 @@ Route::get('/', function () {
     ->with('put',$put)
     ->with('delete',$delete);
 });
+
+Route::get('/apk',function(){
+    $file_path = public_path('/storage/app.apk');
+    return response()->download($file_path);
+});

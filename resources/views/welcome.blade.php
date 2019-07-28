@@ -24,12 +24,14 @@
                                 app is about.
                                 <br />This is also the api for the app .
                                 <br />
-                                <button
+                                <a
                                     class="btn btn-primary"
                                     title="Download the app."
+                                    href="/apk"
+                                    download="/apk"
                                 >
                                     Download
-                                </button>
+                                </a>
                             </p>
                         </div>
                     </div>
